@@ -7,14 +7,16 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.scheduling.annotation.EnableAsync
 
 @Configuration
-class DatabaseConfiguration {
+@EnableAsync
+class ApplicationConfiguration {
 
     @Bean
     fun transactionManager(dataSource: HikariDataSource): SpringTransactionManager {
         Database.connect(dataSource)
-        transaction{
+        transaction {
             SchemaUtils.createMissingTablesAndColumns(UserRepository.UserTable)
         }
         return SpringTransactionManager(
